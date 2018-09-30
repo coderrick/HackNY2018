@@ -24,6 +24,11 @@ export class ArticleDetail extends Component {
       method: 'POST',
       body: JSON.stringify({ storyText: articleContent }),
     })
+
+    if (!response.ok) {
+      return []
+    }
+
     return await response.json()
   }
 
@@ -32,6 +37,11 @@ export class ArticleDetail extends Component {
 
     return (
       <div className="ArticleDetail">
+      {isLoading ? (
+          null
+        ) : (
+          <div className="ArticleDetail__header">{this.props.article.title}</div>
+        )}
         {isLoading ? (
           <Loading />
         ) : (
@@ -46,9 +56,11 @@ export class ArticleDetail extends Component {
 
 function GifVideo({ mp4Url }) {
   return (
-    <video className="GifVideo" autoPlay loop>
-      <source src={mp4Url} type="video/mp4" />
-      Your browser does not support the video tag.
-    </video>
+    <div className="GifVideo">
+      <video className="GifVideo__video" autoPlay loop>
+        <source src={mp4Url} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+    </div>
   )
 }

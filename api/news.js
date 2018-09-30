@@ -10,7 +10,7 @@ const topStoriesEndpoint =
 async function topStories() {
   const response = await fetch(topStoriesEndpoint)
   const { articles } = await response.json()
-  return articles
+  return articles.filter(({ urlToImage, content }) => urlToImage && content)
 }
 
 module.exports = { topStories }
