@@ -1,0 +1,4 @@
+.Loading {
+  flex: 1;
+  background: url(./loading.svg) no-repeat center center;
+}

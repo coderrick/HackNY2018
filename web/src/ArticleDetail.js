@@ -1,0 +1,54 @@
+import React, { Component } from 'react'
+import './ArticleDetail.css'
+
+import { Loading } from './Loading'
+
+export class ArticleDetail extends Component {
+  state = {
+    isLoading: false,
+    gifVideos: [],
+  }
+
+  async componentDidMount() {
+    this.setState({ isLoading: true })
+    const gifVideos = await this.loadGifVideos(this.props.article.content)
+    this.setState({ isLoading: false, gifVideos })
+  }
+
+  async loadGifVideos(articleContent) {
+    const response = await fetch('/api/gif/videos', {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify({ storyText: articleContent }),
+    })
+    return await response.json()
+  }
+
+  render() {
+    const { isLoading, gifVideos } = this.state
+
+    return (
+      <div className="ArticleDetail">
+        {isLoading ? (
+          <Loading />
+        ) : (
+          gifVideos.map(gifVideo => (
+            <GifVideo key={gifVideo} mp4Url={gifVideo} />
+          ))
+        )}
+      </div>
+    )
+  }
+}
+
+function GifVideo({ mp4Url }) {
+  return (
+    <video className="GifVideo" autoPlay loop>
+      <source src={mp4Url} type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+  )
+}
